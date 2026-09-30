@@ -1,301 +1,1184 @@
+```html
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>📖 Auto Storytelling (GitHub Pages Ready)</title>
-  <style>
-    :root{
-      --brand:#ff7a18;
-      --brand-2:#ffb74d;
-      --ink:#0f172a;
-      --panel:#ffffff;
-      --muted:#64748b;
-    }
-    html,body{height:100%}
-    body{
-      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      background:linear-gradient(135deg,#0e1233,#2a2e52);
-      color:#fff; display:flex; flex-direction:column; align-items:center;
-    }
-    h1{margin:16px 8px;text-align:center;text-shadow:0 2px 12px rgba(255,204,0,.55)}
-    .wrap{width:min(960px,96%);}
-    .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:10px 0}
-    .controls label{font-size:.9rem;color:#ffeab0}
-    button,input[type="file"],select{
-      background:var(--brand); color:#111; border:0; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600;
-      box-shadow:0 0 0 2px rgba(255,255,255,.15) inset, 0 6px 14px rgba(0,0,0,.25);
-      transition:.2s transform,.2s filter,.2s background;
-    }
-    button:hover{transform:translateY(-1px);}
-    button:disabled{opacity:.55;filter:grayscale(.6);cursor:not-allowed}
-    textarea{
-      width:100%;min-height:120px;border-radius:12px;border:0;padding:12px;font-size:16px;resize:vertical;
-      box-shadow:inset 0 0 0 2px rgba(255,255,255,.12);
-    }
-    #storyScreenContainer{
-      position:relative; width:100%; height:420px; border-radius:16px; overflow:hidden; margin:12px 0 8px;
-      background:rgba(0,0,0,.5);
-      box-shadow:0 10px 30px rgba(0,0,0,.35), inset 0 0 0 2px rgba(255,255,255,.1);
-    }
-    #storyScreen{height:100%; overflow-y:auto; padding:20px; font-size:20px; line-height:1.65; scroll-behavior:smooth; white-space:pre-wrap}
-    #cornerImage{position:absolute;bottom:10px;right:10px;max-width:120px;max-height:120px;border-radius:12px;box-shadow:0 0 20px rgba(255,255,0,.8);display:none}
-    #musicPlayer{display:block;margin:6px auto 0}
-    .row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-    .badge{font-size:.85rem;color:#111;background:#ffd166;border-radius:8px;padding:6px 10px;display:inline-flex;align-items:center;gap:6px}
-    .warn{color:#ffeb3b;font-weight:700}
-    .status{font-size:.9rem;color:#c8d1ff;margin:6px 0;text-align:center}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
-    input[type="range"]{vertical-align:middle}
-    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Auto Storytelling Voice Studio</title>
+
+<style>
+:root{
+  --brand:#ff7a18;
+  --brand2:#ffb74d;
+  --dark:#0e1233;
+  --panel:#171c42;
+  --text:#fff;
+  --muted:#cbd5e1;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(135deg,#090d25,#292e59);
+  color:var(--text);
+}
+
+body{
+  padding:15px;
+}
+
+.wrap{
+  width:min(1000px,100%);
+  margin:auto;
+}
+
+h1{
+  text-align:center;
+  margin:8px 0 15px;
+  font-size:30px;
+}
+
+.panel{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  padding:15px;
+  margin-bottom:12px;
+  box-shadow:0 12px 35px rgba(0,0,0,.25);
+}
+
+textarea{
+  width:100%;
+  min-height:180px;
+  resize:vertical;
+  border:0;
+  border-radius:12px;
+  padding:14px;
+  font-size:17px;
+  line-height:1.6;
+  outline:none;
+}
+
+.controls{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:10px;
+  margin-top:12px;
+}
+
+label{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  font-size:14px;
+  color:#ffe8b0;
+}
+
+select,
+input[type="range"],
+input[type="color"],
+input[type="file"]{
+  width:100%;
+}
+
+select{
+  padding:10px;
+  border:0;
+  border-radius:10px;
+  background:#fff;
+  color:#111;
+}
+
+input[type="file"]{
+  background:#fff;
+  color:#111;
+  padding:7px;
+  border-radius:8px;
+}
+
+button{
+  border:0;
+  padding:11px 15px;
+  border-radius:10px;
+  background:var(--brand);
+  color:#111;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s;
+}
+
+button:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.08);
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.buttons{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px;
+}
+
+#storyScreenContainer{
+  position:relative;
+  height:520px;
+  overflow:hidden;
+  border-radius:18px;
+  background:#0e1233;
+  box-shadow:
+    0 15px 45px rgba(0,0,0,.4),
+    inset 0 0 0 2px rgba(255,255,255,.08);
+}
+
+#storyScreen{
+  height:100%;
+  overflow-y:auto;
+  padding:30px;
+  font-size:23px;
+  line-height:1.8;
+  white-space:pre-wrap;
+  scroll-behavior:smooth;
+  text-shadow:0 2px 4px rgba(0,0,0,.7);
+}
+
+#cornerImage{
+  position:absolute;
+  right:15px;
+  bottom:15px;
+  width:110px;
+  max-height:110px;
+  object-fit:contain;
+  border-radius:12px;
+  display:none;
+  box-shadow:0 0 20px rgba(255,200,0,.8);
+}
+
+.status{
+  text-align:center;
+  color:#dbeafe;
+  padding:8px;
+}
+
+.info{
+  background:rgba(255,193,7,.12);
+  border:1px solid rgba(255,193,7,.3);
+  padding:10px;
+  border-radius:10px;
+  color:#ffe9a8;
+  line-height:1.5;
+}
+
+.voiceInfo{
+  text-align:center;
+  color:#cbd5e1;
+  font-size:13px;
+  margin-top:6px;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:8px;
+  background:#ffd166;
+  color:#111;
+  font-weight:700;
+  margin:2px;
+}
+
+#recordingDot{
+  display:none;
+  text-align:center;
+  color:#ff5252;
+  font-weight:800;
+  margin-top:6px;
+}
+
+@media(max-width:600px){
+  h1{
+    font-size:24px;
+  }
+
+  #storyScreen{
+    font-size:19px;
+    padding:20px;
+  }
+
+  #storyScreenContainer{
+    height:430px;
+  }
+}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <h1>📖 Auto Storytelling</h1>
 
-    <div class="badge">⚠️ <span>यह ऐप ब्राउज़र APIs (MediaRecorder, AudioContext) का उपयोग करता है। GitHub Pages पर HTTPS में पूरी तरह काम करेगा। Export में <strong>Voice (speech)</strong> merge नहीं होगी — केवल स्क्रीन + बैकग्राउंड म्यूज़िक शामिल होगा।</span></div>
+<div class="wrap">
 
-    <textarea id="storyInput" placeholder="✍️ अपनी कहानी यहाँ लिखें..."></textarea>
+<h1>Auto Storytelling Voice Studio</h1>
 
-    <div class="controls row">
-      <button id="startAuto">▶ Start</button>
-      <button id="pauseAuto" disabled>⏸ Pause</button>
-      <button id="resumeAuto" disabled>▶ Resume</button>
-      <button id="resetAuto" disabled>⏹ Reset</button>
-      <button id="exportVideo" disabled>🎬 Export Video</button>
-      <button id="downloadText">💾 Download Text</button>
-    </div>
+<div class="panel">
 
-    <div class="controls grid" aria-label="Settings">
-      <label>Voice:
-        <select id="voiceSelect"></select>
-      </label>
-      <label>Speed:
-        <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
-      </label>
-      <label>Pitch:
-        <input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1">
-      </label>
-      <label>Background Color:
-        <input type="color" id="bgColor" value="#0e1233">
-      </label>
-      <label>Upload Background:
-        <input type="file" id="bgImage" accept="image/*">
-      </label>
-      <label>Upload Corner Image:
-        <input type="file" id="uploadImage" accept="image/*">
-      </label>
-      <label>Upload Background Music:
-        <input type="file" id="bgMusic" accept="audio/*">
-      </label>
-      <label>Volume:
-        <input type="range" id="musicVolume" min="0" max="1" step="0.05" value="0.7">
-      </label>
-    </div>
+<div class="info">
+यह version browser की उपलब्ध Text-to-Speech voices का उपयोग करता है।
+Voice की recording के लिए Chrome में Tab Audio Capture इस्तेमाल होगा।
+Male और Female विकल्प आपके device/browser में उपलब्ध voices पर निर्भर करेंगे।
+</div>
 
-    <div id="storyScreenContainer" style="background:rgba(0,0,0,.55)">
-      <div id="storyScreen" tabindex="0" aria-label="Story output will appear here"></div>
-      <img id="cornerImage" alt="corner" />
-    </div>
+<br>
 
-    <div class="status" id="status">Ready.</div>
+<textarea
+id="storyInput"
+placeholder="अपनी कहानी यहाँ लिखें..."
+></textarea>
 
-    <audio id="musicPlayer" loop></audio>
-  </div>
+<div class="buttons" style="margin-top:12px">
 
-  <script>
-    // --- Element refs
-    const el = (id)=>document.getElementById(id);
-    const storyInput=el('storyInput');
-    const storyScreen=el('storyScreen');
-    const cornerImage=el('cornerImage');
-    const bgColor=el('bgColor');
-    const bgImage=el('bgImage');
-    const uploadImage=el('uploadImage');
-    const bgMusic=el('bgMusic');
-    const musicPlayer=el('musicPlayer');
-    const voiceSelect=el('voiceSelect');
-    const speed=el('speed');
-    const pitch=el('pitch');
-    const startBtn=el('startAuto');
-    const pauseBtn=el('pauseAuto');
-    const resumeBtn=el('resumeAuto');
-    const resetBtn=el('resetAuto');
-    const downloadTextBtn=el('downloadText');
-    const exportBtn=el('exportVideo');
-    const statusEl=el('status');
+<button id="startBtn">
+Start Story
+</button>
 
-    // --- State
-    let isPaused=false; let voices=[]; let utter=null; let rafId=null; let rec=null; let chunks=[];
-    let audioCtx=null, mixDest=null, musicNode=null; // audio graph
+<button id="pauseBtn" disabled>
+Pause
+</button>
 
-    // --- Helpers
-    function setStatus(msg){ statusEl.textContent=msg; }
-    function enableRunState(running){
-      startBtn.disabled=running; pauseBtn.disabled=!running; resetBtn.disabled=!running; exportBtn.disabled=false; resumeBtn.disabled=true;
+<button id="resumeBtn" disabled>
+Resume
+</button>
+
+<button id="resetBtn" disabled>
+Reset
+</button>
+
+<button id="recordBtn">
+Record Voice
+</button>
+
+<button id="recordVideoBtn">
+Record Video + Voice
+</button>
+
+<button id="stopRecordBtn" disabled>
+Stop Recording
+</button>
+
+<button id="downloadTextBtn">
+Download Text
+</button>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="controls">
+
+<label>
+Language
+<select id="languageSelect">
+<option value="all">All Languages</option>
+<option value="hi">Hindi</option>
+<option value="en">English</option>
+<option value="ta">Tamil</option>
+<option value="te">Telugu</option>
+<option value="mr">Marathi</option>
+<option value="bn">Bengali</option>
+<option value="gu">Gujarati</option>
+<option value="pa">Punjabi</option>
+<option value="kn">Kannada</option>
+<option value="ml">Malayalam</option>
+</select>
+</label>
+
+
+<label>
+Voice Gender
+<select id="genderSelect">
+<option value="all">All Voices</option>
+<option value="female">Female</option>
+<option value="male">Male</option>
+<option value="unknown">Other / Unknown</option>
+</select>
+</label>
+
+
+<label>
+Voice
+<select id="voiceSelect"></select>
+</label>
+
+
+<label>
+Speed
+<input
+type="range"
+id="speed"
+min="0.5"
+max="2"
+step="0.1"
+value="1"
+>
+<span id="speedValue">1.0</span>
+</label>
+
+
+<label>
+Pitch
+<input
+type="range"
+id="pitch"
+min="0.5"
+max="2"
+step="0.1"
+value="1"
+>
+<span id="pitchValue">1.0</span>
+</label>
+
+
+<label>
+Background Color
+<input
+type="color"
+id="bgColor"
+value="#0e1233"
+>
+</label>
+
+
+<label>
+Background Image
+<input
+type="file"
+id="bgImage"
+accept="image/*"
+>
+</label>
+
+
+<label>
+Corner Image / Logo
+<input
+type="file"
+id="cornerUpload"
+accept="image/*"
+>
+</label>
+
+
+<label>
+Background Music
+<input
+type="file"
+id="musicUpload"
+accept="audio/*"
+>
+</label>
+
+
+<label>
+Music Volume
+<input
+type="range"
+id="musicVolume"
+min="0"
+max="1"
+step="0.05"
+value="0.35"
+>
+</label>
+
+</div>
+
+<div class="voiceInfo" id="voiceInfo">
+Voice information will appear here.
+</div>
+
+</div>
+
+
+<div id="storyScreenContainer">
+
+<div id="storyScreen"></div>
+
+<img id="cornerImage" alt="Logo">
+
+</div>
+
+<div id="recordingDot">
+Recording in progress...
+</div>
+
+<div class="status" id="status">
+Ready
+</div>
+
+<audio
+id="musicPlayer"
+loop
+></audio>
+
+</div>
+
+
+<script>
+
+const $ = id => document.getElementById(id);
+
+const storyInput = $("storyInput");
+const storyScreen = $("storyScreen");
+const container = $("storyScreenContainer");
+
+const startBtn = $("startBtn");
+const pauseBtn = $("pauseBtn");
+const resumeBtn = $("resumeBtn");
+const resetBtn = $("resetBtn");
+
+const recordBtn = $("recordBtn");
+const recordVideoBtn = $("recordVideoBtn");
+const stopRecordBtn = $("stopRecordBtn");
+
+const downloadTextBtn = $("downloadTextBtn");
+
+const languageSelect = $("languageSelect");
+const genderSelect = $("genderSelect");
+const voiceSelect = $("voiceSelect");
+
+const speed = $("speed");
+const pitch = $("pitch");
+
+const speedValue = $("speedValue");
+const pitchValue = $("pitchValue");
+
+const bgColor = $("bgColor");
+const bgImage = $("bgImage");
+
+const cornerUpload = $("cornerUpload");
+const cornerImage = $("cornerImage");
+
+const musicUpload = $("musicUpload");
+const musicPlayer = $("musicPlayer");
+const musicVolume = $("musicVolume");
+
+const statusEl = $("status");
+const voiceInfo = $("voiceInfo");
+const recordingDot = $("recordingDot");
+
+
+let voices = [];
+let filteredVoices = [];
+
+let utterance = null;
+
+let paused = false;
+
+let animationId = null;
+
+let mediaRecorder = null;
+let recordedChunks = [];
+
+let captureStream = null;
+
+let recordingMode = null;
+
+let musicURL = null;
+
+
+/* =========================
+   STATUS
+========================= */
+
+function status(text){
+  statusEl.textContent = text;
+}
+
+
+/* =========================
+   VOICE SYSTEM
+========================= */
+
+function loadVoices(){
+
+  voices = speechSynthesis.getVoices();
+
+  filterVoices();
+
+}
+
+function detectGender(voice){
+
+  const n = (
+    voice.name +
+    " " +
+    voice.voiceURI
+  ).toLowerCase();
+
+  const femaleWords = [
+    "female",
+    "woman",
+    "girl",
+    "zira",
+    "samantha",
+    "susan",
+    "karen",
+    "moira",
+    "veena",
+    "heera",
+    "swara",
+    "neerja"
+  ];
+
+  const maleWords = [
+    "male",
+    "man",
+    "boy",
+    "david",
+    "mark",
+    "daniel",
+    "ravi",
+    "hemant",
+    "madhur",
+    "rishi"
+  ];
+
+  if(femaleWords.some(x => n.includes(x))){
+    return "female";
+  }
+
+  if(maleWords.some(x => n.includes(x))){
+    return "male";
+  }
+
+  return "unknown";
+}
+
+
+function filterVoices(){
+
+  const lang = languageSelect.value;
+
+  const gender = genderSelect.value;
+
+  filteredVoices = voices.filter(v => {
+
+    const voiceLang =
+      (v.lang || "").toLowerCase();
+
+    const languageOK =
+      lang === "all" ||
+      voiceLang.startsWith(lang);
+
+    const detectedGender =
+      detectGender(v);
+
+    const genderOK =
+      gender === "all" ||
+      detectedGender === gender;
+
+    return languageOK && genderOK;
+
+  });
+
+  voiceSelect.innerHTML = "";
+
+  filteredVoices.forEach((voice,index)=>{
+
+    const option =
+      document.createElement("option");
+
+    const gender =
+      detectGender(voice);
+
+    option.value = index;
+
+    option.textContent =
+      voice.name +
+      " (" +
+      voice.lang +
+      ") [" +
+      gender +
+      "]";
+
+    voiceSelect.appendChild(option);
+
+  });
+
+  if(filteredVoices.length){
+
+    voiceSelect.selectedIndex = 0;
+
+    updateVoiceInfo();
+
+  }else{
+
+    const option =
+      document.createElement("option");
+
+    option.textContent =
+      "इस filter में कोई voice उपलब्ध नहीं";
+
+    voiceSelect.appendChild(option);
+
+    voiceInfo.textContent =
+      "इस भाषा/gender की voice आपके browser में उपलब्ध नहीं है।";
+
+  }
+
+}
+
+
+function updateVoiceInfo(){
+
+  const voice =
+    filteredVoices[
+      Number(voiceSelect.value)
+    ];
+
+  if(!voice){
+
+    voiceInfo.textContent =
+      "Voice उपलब्ध नहीं";
+
+    return;
+
+  }
+
+  voiceInfo.innerHTML =
+    "Selected Voice: " +
+    "<span class='badge'>" +
+    voice.name +
+    "</span> " +
+    "<span class='badge'>" +
+    voice.lang +
+    "</span> " +
+    "<span class='badge'>" +
+    detectGender(voice) +
+    "</span>";
+
+}
+
+
+speechSynthesis.onvoiceschanged =
+  loadVoices;
+
+loadVoices();
+
+languageSelect.addEventListener(
+  "change",
+  filterVoices
+);
+
+genderSelect.addEventListener(
+  "change",
+  filterVoices
+);
+
+voiceSelect.addEventListener(
+  "change",
+  updateVoiceInfo
+);
+
+
+/* =========================
+   SPEED / PITCH
+========================= */
+
+speed.addEventListener(
+  "input",
+  ()=>{
+    speedValue.textContent =
+      Number(speed.value).toFixed(1);
+  }
+);
+
+pitch.addEventListener(
+  "input",
+  ()=>{
+    pitchValue.textContent =
+      Number(pitch.value).toFixed(1);
+  }
+);
+
+
+/* =========================
+   STORY PLAY
+========================= */
+
+function startStory(){
+
+  const text =
+    storyInput.value.trim();
+
+  if(!text){
+
+    alert("पहले कहानी लिखें");
+
+    return;
+
+  }
+
+  speechSynthesis.cancel();
+
+  storyScreen.textContent =
+    text;
+
+  storyScreen.scrollTop = 0;
+
+  paused = false;
+
+  const voice =
+    filteredVoices[
+      Number(voiceSelect.value)
+    ];
+
+  utterance =
+    new SpeechSynthesisUtterance(text);
+
+  utterance.rate =
+    Number(speed.value);
+
+  utterance.pitch =
+    Number(pitch.value);
+
+  if(voice){
+
+    utterance.voice =
+      voice;
+
+    utterance.lang =
+      voice.lang;
+
+  }
+
+  utterance.onstart = ()=>{
+    status("Voice चल रही है...");
+  };
+
+  utterance.onend = ()=>{
+    status("Story finished");
+  };
+
+  utterance.onerror = ()=>{
+    status("Voice error");
+  };
+
+  speechSynthesis.speak(
+    utterance
+  );
+
+  if(musicPlayer.src){
+
+    musicPlayer.volume =
+      Number(musicVolume.value);
+
+    musicPlayer.play()
+      .catch(()=>{});
+
+  }
+
+  startScroll();
+
+  startBtn.disabled = true;
+
+  pauseBtn.disabled = false;
+
+  resumeBtn.disabled = true;
+
+  resetBtn.disabled = false;
+
+}
+
+
+startBtn.addEventListener(
+  "click",
+  startStory
+);
+
+
+/* =========================
+   SCROLL
+========================= */
+
+function startScroll(){
+
+  cancelAnimationFrame(animationId);
+
+  function loop(){
+
+    if(!paused){
+
+      storyScreen.scrollTop += 0.7;
+
     }
 
-    // --- Voices
-    function loadVoices(){
-      voices = speechSynthesis.getVoices();
-      voiceSelect.innerHTML='';
-      voices.forEach((v,i)=>{
-        const o=document.createElement('option');
-        o.value=i; o.textContent=`${v.name} (${v.lang})`;
-        voiceSelect.appendChild(o);
-      });
-    }
-    speechSynthesis.onvoiceschanged=loadVoices; loadVoices();
+    if(
+      storyScreen.scrollTop <
+      storyScreen.scrollHeight -
+      storyScreen.clientHeight
+    ){
 
-    // --- Scroll loop using rAF for smoothness
-    function scrollLoop(){
-      if(!isPaused){
-        storyScreen.scrollTop += 1; // adjust speed here if needed
-        if(storyScreen.scrollTop < storyScreen.scrollHeight - storyScreen.clientHeight){
-          rafId = requestAnimationFrame(scrollLoop);
-        } else {
-          cancelAnimationFrame(rafId);
-        }
-      }
+      animationId =
+        requestAnimationFrame(loop);
+
     }
 
-    // --- Audio setup (for export music mix)
-    function ensureAudioGraph(){
-      if(!audioCtx){ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }
-      if(!mixDest){ mixDest=audioCtx.createMediaStreamDestination(); }
-      if(musicPlayer.src && !musicNode){
-        musicNode=audioCtx.createMediaElementSource(musicPlayer);
-        musicNode.connect(mixDest);
-        musicNode.connect(audioCtx.destination); // monitor
-      }
+  }
+
+  animationId =
+    requestAnimationFrame(loop);
+
+}
+
+
+/* =========================
+   PAUSE
+========================= */
+
+pauseBtn.addEventListener(
+  "click",
+  ()=>{
+
+    paused = true;
+
+    speechSynthesis.pause();
+
+    musicPlayer.pause();
+
+    pauseBtn.disabled = true;
+
+    resumeBtn.disabled = false;
+
+    status("Paused");
+
+  }
+);
+
+
+/* =========================
+   RESUME
+========================= */
+
+resumeBtn.addEventListener(
+  "click",
+  ()=>{
+
+    paused = false;
+
+    speechSynthesis.resume();
+
+    if(musicPlayer.src){
+
+      musicPlayer.play()
+        .catch(()=>{});
+
     }
 
-    // --- Actions
-    startBtn.addEventListener('click',()=>{
-      const text = storyInput.value.trim();
-      if(!text){ alert('कृपया कहानी लिखें'); return; }
-      storyScreen.textContent = text; storyScreen.scrollTop = 0; isPaused=false; setStatus('Playing…');
+    startScroll();
 
-      // Voice (note: won't be in exported file)
-      speechSynthesis.cancel();
-      utter = new SpeechSynthesisUtterance(text);
-      utter.rate = parseFloat(speed.value); utter.pitch = parseFloat(pitch.value);
-      if(voices[voiceSelect.value]) utter.voice = voices[voiceSelect.value];
-      utter.onend = ()=>{ setStatus('Voice finished.'); };
-      speechSynthesis.speak(utter);
+    pauseBtn.disabled = false;
 
-      // Music (requires user gesture — this click counts)
-      if(musicPlayer.src){ musicPlayer.play().catch(()=>{}); }
+    resumeBtn.disabled = true;
 
-      // Start smooth scroll
-      cancelAnimationFrame(rafId); rafId=requestAnimationFrame(scrollLoop);
+    status("Resumed");
 
-      // Buttons
-      enableRunState(true); resumeBtn.disabled=true;
-    });
+  }
+);
 
-    pauseBtn.addEventListener('click',()=>{
-      isPaused=true; speechSynthesis.pause(); if(musicPlayer.src) musicPlayer.pause();
-      resumeBtn.disabled=false; pauseBtn.disabled=true; setStatus('Paused.');
-    });
 
-    resumeBtn.addEventListener('click',()=>{
-      isPaused=false; speechSynthesis.resume(); if(musicPlayer.src) musicPlayer.play().catch(()=>{});
-      cancelAnimationFrame(rafId); rafId=requestAnimationFrame(scrollLoop);
-      resumeBtn.disabled=true; pauseBtn.disabled=false; setStatus('Resumed.');
-    });
+/* =========================
+   RESET
+========================= */
 
-    resetBtn.addEventListener('click',()=>{
-      isPaused=false; speechSynthesis.cancel(); cancelAnimationFrame(rafId);
-      storyScreen.textContent=''; storyScreen.scrollTop=0; if(musicPlayer.src){ musicPlayer.pause(); musicPlayer.currentTime=0; }
-      startBtn.disabled=false; pauseBtn.disabled=true; resumeBtn.disabled=true; resetBtn.disabled=true; setStatus('Ready.');
-    });
+resetBtn.addEventListener(
+  "click",
+  ()=>{
 
-    // Enable buttons when user types
-    storyInput.addEventListener('input',()=>{
-      const has = storyInput.value.trim().length>0; startBtn.disabled=!has; resetBtn.disabled=!has; exportBtn.disabled=!has;
-    });
+    speechSynthesis.cancel();
 
-    // --- File inputs
-    uploadImage.addEventListener('change',e=>{
-      const f=e.target.files[0]; if(!f) return; const r=new FileReader();
-      r.onload = ev=>{ cornerImage.src=ev.target.result; cornerImage.style.display='block'; };
-      r.readAsDataURL(f);
-    });
-    bgImage.addEventListener('change',e=>{
-      const f=e.target.files[0]; if(!f) return; const r=new FileReader();
-      r.onload = ev=>{ el('storyScreenContainer').style.background=`url(${ev.target.result}) center/cover no-repeat`; };
-      r.readAsDataURL(f);
-    });
-    bgColor.addEventListener('input',()=>{ el('storyScreenContainer').style.background=bgColor.value; });
-    bgMusic.addEventListener('change',e=>{
-      const f=e.target.files[0]; if(!f) return; const r=new FileReader();
-      r.onload = ev=>{ musicPlayer.src=ev.target.result; musicPlayer.volume=parseFloat(musicVolume.value); };
-      r.readAsDataURL(f);
-    });
-    el('musicVolume').addEventListener('input',()=>{ musicPlayer.volume=parseFloat(el('musicVolume').value); });
+    cancelAnimationFrame(
+      animationId
+    );
 
-    // --- Download text
-    downloadTextBtn.addEventListener('click',()=>{
-      const blob=new Blob([storyInput.value||''],{type:'text/plain'});
-      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='MyStory.txt'; a.click();
-    });
+    paused = false;
 
-    // --- Export video (screen + background music). Voice cannot be recorded.
-    exportBtn.addEventListener('click',async()=>{
-      alert('⚠️ यह वीडियो केवल ब्राउज़र मेमोरी में बनेगी। बड़ी फाइल से ब्राउज़र धीमा हो सकता है।\nनोट: Text-to-Speech आवाज़ एक्सपोर्ट में शामिल नहीं होगी।');
+    storyScreen.textContent = "";
 
-      // Ensure audio graph so music mixes in
-      ensureAudioGraph();
-      // Must be resumed due to autoplay policies
-      try{ await audioCtx.resume(); }catch{}
+    storyScreen.scrollTop = 0;
 
-      const container = el('storyScreenContainer');
-      const vStream = container.captureStream(30); // 30 FPS
-      const aStream = mixDest.stream; // music only
-      const mixed = new MediaStream([...vStream.getVideoTracks(), ...aStream.getAudioTracks()]);
+    musicPlayer.pause();
 
-      chunks=[];
-      rec = new MediaRecorder(mixed,{mimeType:'video/webm'});
-      rec.ondataavailable = e=>{ if(e.data?.size>0) chunks.push(e.data); };
-      rec.onstop = ()=>{
-        const blob = new Blob(chunks,{type:'video/webm'});
-        const url = URL.createObjectURL(blob);
-        const a=document.createElement('a'); a.href=url; a.download='MyStoryVideo.webm'; a.click();
-        setStatus('Export complete.');
+    musicPlayer.currentTime = 0;
+
+    startBtn.disabled = false;
+
+    pauseBtn.disabled = true;
+
+    resumeBtn.disabled = true;
+
+    resetBtn.disabled = true;
+
+    status("Ready");
+
+  }
+);
+
+
+/* =========================
+   BACKGROUND
+========================= */
+
+bgColor.addEventListener(
+  "input",
+  ()=>{
+
+    container.style.background =
+      bgColor.value;
+
+  }
+);
+
+
+bgImage.addEventListener(
+  "change",
+  e=>{
+
+    const file =
+      e.target.files[0];
+
+    if(!file) return;
+
+    const reader =
+      new FileReader();
+
+    reader.onload =
+      ev => {
+
+        container.style.background =
+          "url('" +
+          ev.target.result +
+          "') center/cover no-repeat";
+
       };
 
-      // Start recording for the duration of the voice (if speaking), else until scroll end or 15s fallback
-      const maxMs = 15000; // fallback cap
-      rec.start(); setStatus('Recording…');
+    reader.readAsDataURL(file);
 
-      // If currently speaking, stop when voice ends
-      let stopped=false;
-      const stopRec = ()=>{ if(stopped) return; stopped=true; try{rec.stop();}catch{} };
+  }
+);
 
-      if(utter && speechSynthesis.speaking){
-        const prevOnEnd = utter.onend;
-        utter.onend = (ev)=>{ prevOnEnd && prevOnEnd(ev); stopRec(); };
-      } else {
-        // Stop when scroll reaches end
-        const checkEnd = ()=>{
-          const atEnd = storyScreen.scrollTop >= (storyScreen.scrollHeight - storyScreen.clientHeight - 2);
-          if(atEnd) stopRec(); else requestAnimationFrame(checkEnd);
-        };
-        requestAnimationFrame(checkEnd);
+
+/* =========================
+   CORNER IMAGE
+========================= */
+
+cornerUpload.addEventListener(
+  "change",
+  e=>{
+
+    const file =
+      e.target.files[0];
+
+    if(!file) return;
+
+    const reader =
+      new FileReader();
+
+    reader.onload =
+      ev => {
+
+        cornerImage.src =
+          ev.target.result;
+
+        cornerImage.style.display =
+          "block";
+
+      };
+
+    reader.readAsDataURL(file);
+
+  }
+);
+
+
+/* =========================
+   MUSIC
+========================= */
+
+musicUpload.addEventListener(
+  "change",
+  e=>{
+
+    const file =
+      e.target.files[0];
+
+    if(!file) return;
+
+    if(musicURL){
+
+      URL.revokeObjectURL(
+        musicURL
+      );
+
+    }
+
+    musicURL =
+      URL.createObjectURL(file);
+
+    musicPlayer.src =
+      musicURL;
+
+    musicPlayer.volume =
+      Number(musicVolume.value);
+
+    status("Music loaded");
+
+  }
+);
+
+
+musicVolume.addEventListener(
+  "input",
+  ()=>{
+    musicPlayer.volume =
+      Number(musicVolume.value);
+  }
+);
+
+
+/* =========================
+   DOWNLOAD TEXT
+========================= */
+
+downloadTextBtn.addEventListener(
+  "click",
+  ()=>{
+
+    const blob =
+      new Blob(
+        [storyInput.value],
+        {
+          type:"text/plain;charset=utf-8"
+        }
+      );
+
+    const url =
+      URL.createObjectURL(blob);
+
+    const a =
+      document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+      "MyStory.txt";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+  }
+);
+
+
+/* =====================================================
+   RECORD VOICE / VIDEO
+=====================================================
+
+   IMPORTANT:
+
+   Browser speechSynthesis का audio सीधे
+   MediaRecorder को नहीं मिलता।
+
+   इसलिए Chrome Tab Audio Capture इस्तेमाल किया जाता है।
+
+   User को:
+   Share screen -> This Tab -> Share tab audio
+   चुनना होगा.
+===================================================== */
+
+
+async function startCapture(
+  videoMode
+){
+
+  if(!storyInput.value.trim()){
+
+    alert(
+      "पहले कहानी लिखें"
+    );
+
+    return;
+
+  }
+
+  try{
+
+    captureStream =
+      await navigator.mediaDevices
+      .getDisplayMedia({
+
+        video: videoMode,
+
+        audio: true
+
+      });
+
+  }catch(error){
+
+    alert(
+      "Recording शुरू नहीं हुई। Chrome में Current Tab चुनें और Share tab audio को ON करें।"
+    );
+
+    return;
+
+  }
+
+
+  recordedChunks = [];
+
+  recordingMode =
+    videoMode ?
+    "video" :
+    "audio";
+
+
+  let mime =
+    videoMode
+    ? "video/webm;codecs=vp9,opus"
+    : "audio/webm;codecs=opus";
+
+
+  if(!MediaRecorder.isTypeSupported(mime)){
+
+    mime =
+      videoMode
+      ? "video/webm"
+      : "audio/webm";
+
+  }
+
+
+  mediaRecorder =
+    new MediaRecorder(
+      captureStream,
+      {
+        mimeType:mime
       }
-      // Hard timeout safeguard
-      setTimeout(stopRec, maxMs);
+    );
 
-      // Make sure music is playing during export (requires gesture)
-      if(musicPlayer.src){ try{ await musicPlayer.play(); }catch{} }
-    });
 
-    // Keyboard support
-    window.addEventListener('keydown',(e)=>{
-      if(e.key===' '){ e.preventDefault(); if(!pauseBtn.disabled) pauseBtn.click(); else if(!resumeBtn.disabled) resumeBtn.click(); }
-    });
-  </script>
-</body>
-</html>
+  mediaRecorder.ondataavailable =
+    event => {
+```
